@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useState, useDeferredValue, useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
 import Results from "./Results";
 import AdoptedPetContext from "./AdoptedPetContext";
@@ -18,6 +18,12 @@ const SearchParams = () => {
 
   const results = useQuery(["search", requestParams], fetchSearch);
   const pets = results?.data?.pets ?? [];
+  /*Used when something is expensive to rerender and causes jank accross the app,this will deferr the rerendering of this component
+    Used for VERY specific use cases
+  */
+  const deferredPets = useDeferredValue(pets); 
+  const renderedPets = useMemo( () => <Results pets={deferredPets} />,
+  [deferredPets]);
 
   return (
     <div className="search-params">
@@ -75,10 +81,9 @@ const SearchParams = () => {
             ))}
           </select>
         </label>
-
         <button>Submit</button>
-      </form>
-      <Results pets={pets} />
+      </form  >
+      {renderedPets}
     </div>
   );
 };
