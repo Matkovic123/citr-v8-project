@@ -1,4 +1,10 @@
-import { useContext, useState, useDeferredValue, useMemo } from "react";
+import {
+  useContext,
+  useState,
+  useDeferredValue,
+  useMemo,
+  useTransition,
+} from "react";
 import { useQuery } from "@tanstack/react-query";
 import Results from "./Results";
 import AdoptedPetContext from "./AdoptedPetContext";
@@ -15,15 +21,18 @@ const SearchParams = () => {
   const [adoptedPet] = useContext(AdoptedPetContext);
   const [animal, setAnimal] = useState("");
   const [breeds] = useBreedList(animal);
+  const [isPending, startTransition] = useTransition();
 
   const results = useQuery(["search", requestParams], fetchSearch);
   const pets = results?.data?.pets ?? [];
   /*Used when something is expensive to rerender and causes jank accross the app,this will deferr the rerendering of this component
     Used for VERY specific use cases
   */
-  const deferredPets = useDeferredValue(pets); 
-  const renderedPets = useMemo( () => <Results pets={deferredPets} />,
-  [deferredPets]);
+  const deferredPets = useDeferredValue(pets);
+  const renderedPets = useMemo(
+    () => <Results pets={deferredPets} />,
+    [deferredPets]
+  );
 
   return (
     <div className="search-params">
@@ -36,7 +45,12 @@ const SearchParams = () => {
             breed: formData.get("breed") ?? "",
             location: formData.get("location") ?? "",
           };
-          setRequestParams(obj);
+          startTransition(() => {
+            // calling a set state fun in here means its low priority & can be interupted
+            // calling this isn't a good example as it requires no UI rerendering and thus no deferring
+            // setting pets state would be a better idea
+            setRequestParams(obj);
+          });
         }}
       >
         {adoptedPet ? (
@@ -81,8 +95,14 @@ const SearchParams = () => {
             ))}
           </select>
         </label>
-        <button>Submit</button>
-      </form  >
+        {isPending ? (
+          <div className="mini loading-pane">
+            <h2 className="loader">🐶</h2>
+          </div>
+        ) : (
+          <button>Submit</button>
+        )}
+      </form>
       {renderedPets}
     </div>
   );
