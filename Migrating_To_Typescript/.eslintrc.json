@@ -5,25 +5,32 @@
     "plugin:react/recommended",
     "plugin:jsx-a11y/recommended",
     "plugin:react-hooks/recommended",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:@typescript-eslint/recommended-requiring-type-checking", // to make ts linting more strict, also in .js files
     "prettier" // make sure to keep in last place
   ],
   "rules": {
     "react/prop-types": 0, // use TypescriptTypes or dont use types.
-    "react/react-in-jsx-scope": 0 // dont have to import reavt everywhere where I wanna use it. Available since React 17
+    "react/react-in-jsx-scope": 0, // dont have to import reavt everywhere where I wanna use it. Available since React 17
+    "typescript-eslint/no-empty-functions": 0
   },
   "plugins": [
     "react",
-     "import", // allows ESlint to follow imports, if you make a mistake exporting one thing from a file and importing another in another file, lint will catch that
-     "jsx-a11y" // catchec simple accessibillity errors, such as adding a click listener to something unclickable
+    "import", // allows ESlint to follow imports, if you make a mistake exporting one thing from a file and importing another in another file, lint will catch that
+    "jsx-a11y", // catches simple accessibillity errors, such as adding a click listener to something unclickable
+    "@typescript-eslint"
   ],
+  "parser": "@typescript-eslint/parser",
   "parserOptions": {
+    "project": "./tsconfig.json", // you have to point manually to the config file
     "ecmaVersion": 2022,
     "sourceType": "module",
     "ecmaFeatures": {
       "jsx": true
     }
   },
-  "env": { // make browser or node features available, such as browser fetch
+  "env": {
+    // make browser or node features available, such as browser fetch
     "es6": true,
     "browser": true,
     "node": true
@@ -32,9 +39,12 @@
     "react": {
       "version": "detect" // go to package.json and figure it out
     },
+    "import/parsers": {
+      "@typescript-eslint/parser": [".ts,", ".tsx"]
+    },
     "import/resolver": {
-      "node": {
-        "extensions": [".js", ".jsx"] // tell lint to include these file extensions, default is only .js
+      "typescript": {
+        "alwaysTryTypes": true
       }
     }
   }
