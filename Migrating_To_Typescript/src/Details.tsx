@@ -6,17 +6,21 @@ import fetchPet from "./fetchPet";
 import Carousel from "./Carousel";
 import ErrorBoundary from "./ErrorBoundarie";
 import Modal from "./Modal";
+import { PetAPIResponse } from "./APIResponsesTypes";
 
 const Details = () => {
+  const { id } = useParams();
+  if (!id) {
+    throw new Error("Why did you not give me an id. I wanted an id. I have no");
+  }
   const [showModal, setShowModal] = useState(false);
   const navigate = useNavigate();
-  // eslint-disable-next-line no-unused-vars
+  const results = useQuery<PetAPIResponse>(["details", id], fetchPet);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [_, setAdoptedPet] = useContext(AdoptedPetContext); // underscore symbolizes that I don't care about the value, I just wanna set it
-  const { id } = useParams();
   // "details" is an arbitrary caching keyvnjm,cf
   // if query cache is empty, call fetchPeet as last param
   // you can't await this rending function
-  const results = useQuery(["details", id], fetchPet);
   if (results.isLoading) {
     return (
       <div className="loading-pane">
@@ -24,7 +28,10 @@ const Details = () => {
       </div>
     );
   }
-  const pet = results.data.pets[0];
+  const pet = results?.data?.pets[0];
+  if (!pet) {
+    throw new Error("no pet lol");
+  }
   return (
     <div className="details">
       <Carousel images={pet.images} />
@@ -60,11 +67,11 @@ const Details = () => {
   );
 };
 
-function DetailsErrorBoundary(props) {
+function DetailsErrorBoundary() {
   // forward props
   return (
     <ErrorBoundary>
-      <Details {...props} />
+      <Details/>
     </ErrorBoundary>
   );
 }

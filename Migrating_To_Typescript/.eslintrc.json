@@ -12,7 +12,7 @@
   "rules": {
     "react/prop-types": 0, // use TypescriptTypes or dont use types.
     "react/react-in-jsx-scope": 0, // dont have to import reavt everywhere where I wanna use it. Available since React 17
-    "typescript-eslint/no-empty-functions": 0
+    "@typescript-eslint/no-empty-function": 0
   },
   "plugins": [
     "react",
