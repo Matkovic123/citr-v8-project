@@ -1,6 +1,10 @@
-import { Component } from "react";
+import { Component, MouseEvent } from "react";
 
-class Carousel extends Component {
+interface IProps {
+  images: string[];
+}
+
+class Carousel extends Component<IProps> {
   state = {
     active: 0,
   };
@@ -10,8 +14,13 @@ class Carousel extends Component {
   };
   // arrow function captures this context where it was written, e.g. Carousel class in this case
   // regular function capture sthe context of where it was invoked
-  handleIndexClick = (e) => {
-    this.setState({ active: +e.target.dataset.index });
+  handleIndexClick = (event: MouseEvent<HTMLElement>) => {
+    if (!(event.target instanceof HTMLElement)) {
+      return;
+    }
+    if (event.target.dataset.index) {
+      this.setState({ active: +event.target.dataset.index });
+    }
     // target.dataset gets all values from DOM element attributes starting with "data-"
     // all these attributes will return a string because everything in a DOM is a string
   };

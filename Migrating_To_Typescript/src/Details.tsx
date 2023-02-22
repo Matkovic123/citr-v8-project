@@ -18,7 +18,7 @@ const Details = () => {
   const results = useQuery<PetAPIResponse>(["details", id], fetchPet);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [_, setAdoptedPet] = useContext(AdoptedPetContext); // underscore symbolizes that I don't care about the value, I just wanna set it
-  // "details" is an arbitrary caching keyvnjm,cf
+  // "details" is an arbitrary caching key
   // if query cache is empty, call fetchPeet as last param
   // you can't await this rending function
   if (results.isLoading) {
