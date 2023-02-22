@@ -5,9 +5,9 @@ import { Animal } from "./APIResponsesTypes";
 export default function useBreedList(animal: Animal) {
   const results = useQuery(["breeds", animal], fetchBreedList);
 
-  if (results.isError) {
-    return new Error("Fetching breeds failed", results.error as ErrorOptions);
-  }
+  // if (results.isError) {
+  //   return new Error("Fetching breeds failed", results.error as ErrorOptions);
+  // }
   return [results?.data?.breeds ?? [], results.status] as [
     string[],
     QueryStatus

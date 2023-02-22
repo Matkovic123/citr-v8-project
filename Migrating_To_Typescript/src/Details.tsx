@@ -6,7 +6,6 @@ import fetchPet from "./fetchPet";
 import Carousel from "./Carousel";
 import ErrorBoundary from "./ErrorBoundarie";
 import Modal from "./Modal";
-import { PetAPIResponse } from "./APIResponsesTypes";
 
 const Details = () => {
   const { id } = useParams();
@@ -15,7 +14,7 @@ const Details = () => {
   }
   const [showModal, setShowModal] = useState(false);
   const navigate = useNavigate();
-  const results = useQuery<PetAPIResponse>(["details", id], fetchPet);
+  const results = useQuery(["details", id], fetchPet);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [_, setAdoptedPet] = useContext(AdoptedPetContext); // underscore symbolizes that I don't care about the value, I just wanna set it
   // "details" is an arbitrary caching key
@@ -71,7 +70,7 @@ function DetailsErrorBoundary() {
   // forward props
   return (
     <ErrorBoundary>
-      <Details/>
+      <Details />
     </ErrorBoundary>
   );
 }
