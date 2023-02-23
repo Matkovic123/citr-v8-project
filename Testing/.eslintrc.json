@@ -1,0 +1,41 @@
+{
+  "extends": [
+    "eslint:recommended",
+    "plugin:import/errors", // lines 4-6 ensure lint does not complain about valid react syntax
+    "plugin:react/recommended",
+    "plugin:jsx-a11y/recommended",
+    "plugin:react-hooks/recommended",
+    "prettier" // make sure to keep in last place
+  ],
+  "rules": {
+    "react/prop-types": 0, // use TypescriptTypes or dont use types.
+    "react/react-in-jsx-scope": 0 // dont have to import reavt everywhere where I wanna use it. Available since React 17
+  },
+  "plugins": [
+    "react",
+     "import", // allows ESlint to follow imports, if you make a mistake exporting one thing from a file and importing another in another file, lint will catch that
+     "jsx-a11y" // catchec simple accessibillity errors, such as adding a click listener to something unclickable
+  ],
+  "parserOptions": {
+    "ecmaVersion": 2022,
+    "sourceType": "module",
+    "ecmaFeatures": {
+      "jsx": true
+    }
+  },
+  "env": { // make browser or node features available, such as browser fetch
+    "es6": true,
+    "browser": true,
+    "node": true
+  },
+  "settings": {
+    "react": {
+      "version": "detect" // go to package.json and figure it out
+    },
+    "import/resolver": {
+      "node": {
+        "extensions": [".js", ".jsx"] // tell lint to include these file extensions, default is only .js
+      }
+    }
+  }
+}
